@@ -1,5 +1,5 @@
 from conans import ConanFile
-from conan.tools.cmake import CMakeToolchain, CMakeDeps
+from conan.tools.cmake import CMakeToolchain, CMakeDeps, CMake
 
 
 class TermGraphConan(ConanFile):
@@ -15,7 +15,7 @@ class TermGraphConan(ConanFile):
         tc = CMakeToolchain(self)
         tc.generate()
 
-    # def build(self):
-        # cmake = CMake(self)
-        # cmake.configure()
-        # cmake.build()
+    def build(self):
+        cmake = CMake(self)
+        cmake.configure()
+        cmake.build()
