@@ -7,5 +7,5 @@ project (conan_test)
 
 find_package (fmt REQUIRED)
 
-add_executable (conan_test main.cpp)
+add_executable (conan_test src/main.cpp)
 target_link_libraries (conan_test PUBLIC fmt::fmt)
