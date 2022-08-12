@@ -1,6 +1,5 @@
-git clean -df                      &&
-conan remove -f '*'                &&
-conan install --build=missing .    &&
-cmake --preset=release -G Ninja ./ &&
-cmake --build ./                   &&
+git clean -df                                 &&
+conan remove -f '*'                           &&
+conan install -pr:b=default --build=missing . &&
+conan build .                                 &&
 ./conan_test
