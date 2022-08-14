@@ -3,9 +3,11 @@
 
 cmake_minimum_required (VERSION 3.22.0)
 
-project (conan_test)
+project (cpp_template)
 
 find_package (fmt REQUIRED)
 
-add_executable (conan_test src/main.cpp)
-target_link_libraries (conan_test PUBLIC fmt::fmt)
+add_executable (cpp_template src/main.cpp)
+
+target_link_libraries (cpp_template PUBLIC fmt::fmt)
+

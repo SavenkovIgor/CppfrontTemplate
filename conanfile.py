@@ -2,7 +2,7 @@ from conans import ConanFile
 from conan.tools.cmake import CMakeToolchain, CMakeDeps, CMake
 
 
-class TermGraphConan(ConanFile):
+class CppTemplate(ConanFile):
     generators = 'CMakeToolchain', 'CMakeDeps'
     settings = 'os', 'arch', 'compiler', 'build_type'
 
@@ -19,3 +19,4 @@ class TermGraphConan(ConanFile):
         cmake = CMake(self)
         cmake.configure()
         cmake.build()
+
