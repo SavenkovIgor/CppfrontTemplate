@@ -1,12 +1,20 @@
 from conans import ConanFile
-from conan.tools.cmake import CMakeToolchain, CMakeDeps, CMake
+from conan.tools.cmake import CMakeToolchain, CMakeDeps, CMake, cmake_layout
+from conan.tools.build import check_min_cppstd
 
 
 class CppTemplate(ConanFile):
     generators = 'CMakeToolchain', 'CMakeDeps'
     settings = 'os', 'arch', 'compiler', 'build_type'
 
-    requires = 'fmt/9.0.0'
+    requires = 'cppfront/cci.20230103', 'fmt/9.0.0'
+
+    def validate(self):
+        if self.info.settings.compiler.cppstd:
+            check_min_cppstd(self, "20")
+
+    def layout(self):
+        cmake_layout(self)
 
     def generate(self):
         deps = CMakeDeps(self)

@@ -27,9 +27,6 @@ class Project:
     def name(self) -> str:
         return self.root_dir().name
 
-    def build_dir(self) -> Path:
-        return self.root_dir() / 'build'
-
     def install(self):
         print(f'---INSTALL {self.name()}---')
         system_call(f'conan install -if ./conanfiles -pr:b=default --build=missing ./')
@@ -37,16 +34,18 @@ class Project:
     def build(self):
         self.install()
         print(f'---BUILD {self.name()}---')
-        system_call(f'conan build -if ./conanfiles -bf ./build ./')
+        system_call(f'conan build -if ./conanfiles ./')
 
     def run(self):
         print(f'---RUN {self.name()}---')
-        system_call(f'./build/cpp_template')
+        binary = self.root_dir() / 'build' / 'Release' / 'cpp_template'
+        system_call(f'{binary}')
 
     def clear(self, clear_conan: bool = False):
         # rm -rf ./build ./conanfiles
         print(f'---CLEAR {self.name()}---')
-        delete_if_exist(self.build_dir())
+        delete_if_exist(self.root_dir() / 'CMakeUserPresets.json')
+        delete_if_exist(self.root_dir() / 'build')
         delete_if_exist(self.root_dir() / 'conanfiles')
 
         if clear_conan:
@@ -56,15 +55,21 @@ class Project:
 def main():
     parser = argparse.ArgumentParser(description='Project build script')
 
-    parser.add_argument('--install',     action='store_true', help='Install dependencies')
-    parser.add_argument('--build',       action='store_true', help='Build project')
-    parser.add_argument('--run',         action='store_true', help='Run project')
-    parser.add_argument('--clear',       action='store_true', help='Clear project')
-    parser.add_argument('--clear-all',   action='store_true', help='Clear project and conan cache')
+    parser.add_argument('--install',   action='store_true', help='Install dependencies')
+    parser.add_argument('--build',     action='store_true', help='Build project')
+    parser.add_argument('--run',       action='store_true', help='Run project')
+    parser.add_argument('--clear',     action='store_true', help='Clear project')
+    parser.add_argument('--clear-all', action='store_true', help='Clear project and conan cache')
 
     args = parser.parse_args()
 
     app = Project()
+
+    if args.clear:
+        app.clear()
+
+    if args.clear_all:
+        app.clear(clear_conan=True)
 
     if args.install:
         app.install()
@@ -74,12 +79,6 @@ def main():
 
     if args.run:
         app.run()
-
-    if args.clear:
-        app.clear()
-
-    if args.clear_all:
-        app.clear(clear_conan=True)
 
 
 if __name__ == '__main__':

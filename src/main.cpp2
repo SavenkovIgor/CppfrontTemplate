@@ -3,8 +3,11 @@
 
 #include <fmt/core.h>
 
-int main(int argc, char* argv[])
-{
-    fmt::print("Hello, {} world!\n", 42);
+printHelloWorld: (in num: int) = {
+    fmt::print("Hello, {} world!\n", num);
+}
+
+main: () -> int = {
+    printHelloWorld(42);
     return 0;
 }
