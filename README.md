@@ -1,9 +1,51 @@
-# Simple conan/cppfront template project
+# Cppfront project template
 
-## Build
+This is a template repository for C++ projects that use `cppfront`, `CMake`, `conan` and `fmt` library as usage example.
+
 [![.github/workflows/Build.yml](https://github.com/SavenkovIgor/cpp-template/actions/workflows/Build.yml/badge.svg)](https://github.com/SavenkovIgor/cpp-template/actions/workflows/Build.yml)
 
-To build project just run script at `project.sh --install --build --run`
+## Project structure
 
-## Expected config:
-- Conan v1.59.0
+```bash
+├── .github/workflows/Build.yml # Github actions build script
+├── src/main.cpp2               # Main cpp2 file
+├── CMakeLists.txt              # Cmake file
+├── conanfile.py                # Conan file with cppfront dependency
+└── project.py                  # Main project script
+```
+
+## Getting Started
+
+To use this template, click the "Use this template" button at the top of the repository.
+
+## Dependencies
+
+- Conan (1.59.0)
+- Cmake
+- Cppfront
+- fmt (9.0.0) - just for example. You can remove it from `conanfile.py` and `main.cpp2` if you don't need it.
+
+## :hammer_and_wrench: Build
+
+To run this project you can use a script
+
+```bash
+./project.py --install --build --run
+```
+
+or you can run commands from script manually:
+
+```bash
+# Install dependencies
+conan install -if ./conanfiles -pr:b=default --build=missing ./
+
+# Build project
+conan build -if ./conanfiles ./
+
+# Run resulting binary
+./build/Release/cpp_template
+```
+
+## Contributing
+
+If you would like to contribute to this project, please fork the repository and submit a pull request.
