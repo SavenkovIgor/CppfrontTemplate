@@ -20,7 +20,7 @@ To use this template, click the "Use this template" button at the top of the rep
 
 ## Dependencies
 
-- Conan (1.59.0)
+- Conan2
 - Cmake
 - Cppfront
 - fmt (9.0.0) - just for example. You can remove it from `conanfile.py` and `main.cpp2` if you don't need it.
@@ -37,13 +37,13 @@ or you can run commands from script manually:
 
 ```bash
 # Install dependencies
-conan install -if ./conanfiles -pr:b=default --build=missing ./
+conan install -of ./conanfiles -pr:h=./conan_profile/default -pr:b=./conan_profile/default --build=missing ./
 
 # Build project
-conan build -if ./conanfiles ./
+conan build -of ./conanfiles ./
 
 # Run resulting binary
-./build/Release/cpp_template
+./conanfiles/build/Release/cpp_template
 ```
 
 ## Contributing

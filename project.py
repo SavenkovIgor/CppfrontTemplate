@@ -5,10 +5,6 @@ import argparse
 from pathlib import Path
 
 
-def repository_root() -> Path:
-    return Path(__file__).parent
-
-
 def system_call(command: str):
     if subprocess.call(command, shell=True, executable='/bin/bash') != 0:
         exit(1)
@@ -21,35 +17,33 @@ def delete_if_exist(path: Path):
 
 
 class Project:
-    def root_dir(self) -> Path:
-        return Path(__file__).parent
-
-    def name(self) -> str:
-        return self.root_dir().name
+    def __init__(self):
+        self.root: Path = Path(__file__).parent
+        self.name: str = self.root.name
 
     def install(self):
-        print(f'---INSTALL {self.name()}---')
-        system_call(f'conan install -if ./conanfiles -pr:b=default --build=missing ./')
+        print(f'---INSTALL {self.name}---')
+        system_call(f'conan install -of ./conanfiles -pr:h=./conan_profile/default -pr:b=./conan_profile/default --build=missing ./')
 
     def build(self):
         self.install()
-        print(f'---BUILD {self.name()}---')
-        system_call(f'conan build -if ./conanfiles ./')
+        print(f'---BUILD {self.name}---')
+        system_call(f'conan build -of ./conanfiles ./')
 
     def run(self):
-        print(f'---RUN {self.name()}---')
-        binary = self.root_dir() / 'build' / 'Release' / 'cpp_template'
+        print(f'---RUN {self.name}---')
+        binary = self.root / 'conanfiles/build/Release/cpp_template'
         system_call(f'{binary}')
 
     def clear(self, clear_conan: bool = False):
         # rm -rf ./build ./conanfiles
-        print(f'---CLEAR {self.name()}---')
-        delete_if_exist(self.root_dir() / 'CMakeUserPresets.json')
-        delete_if_exist(self.root_dir() / 'build')
-        delete_if_exist(self.root_dir() / 'conanfiles')
+        print(f'---CLEAR {self.name}---')
+        delete_if_exist(self.root / 'CMakeUserPresets.json')
+        delete_if_exist(self.root / 'build')
+        delete_if_exist(self.root / 'conanfiles')
 
         if clear_conan:
-            system_call('conan remove -f "*"')
+            system_call('conan remove -c "*"')
 
 
 def main():

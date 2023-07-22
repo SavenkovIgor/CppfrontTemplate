@@ -16,7 +16,13 @@ jobs:
     - name: Install Conan package manager
       uses: turtlebrowser/get-conan@main
       with:
-        version: 1.59.0
+        version: 2.0.9
+
+    - name: Create default Conan profile
+      run: conan profile detect
+
+    - name: Replace default Conan profile
+      run: cp conan_profile/default ~/.conan2/profiles/default
 
     - name: Install
       run: ./project.py --install
