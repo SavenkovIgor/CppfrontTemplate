@@ -29,16 +29,16 @@ class Project:
 
     def install(self):
         print(f'---INSTALL {self.name()}---')
-        system_call(f'conan install -if ./conanfiles -pr:b=default --build=missing ./')
+        system_call(f'conan install -of ./conanfiles -pr:b=default --build=missing ./')
 
     def build(self):
         self.install()
         print(f'---BUILD {self.name()}---')
-        system_call(f'conan build -if ./conanfiles ./')
+        system_call(f'conan build -of ./conanfiles ./')
 
     def run(self):
         print(f'---RUN {self.name()}---')
-        binary = self.root_dir() / 'build' / 'Release' / 'cpp_template'
+        binary = self.root_dir() / 'conanfiles/build/Release/cpp_template'
         system_call(f'{binary}')
 
     def clear(self, clear_conan: bool = False):
