@@ -7,7 +7,7 @@ class CppTemplate(ConanFile):
     generators = 'CMakeToolchain', 'CMakeDeps'
     settings = 'os', 'arch', 'compiler', 'build_type'
 
-    requires = 'cppfront/cci.20230103', 'fmt/9.0.0'
+    requires = 'cppfront/cci.20231017', 'fmt/9.0.0'
 
     def validate(self):
         if self.info.settings.compiler.cppstd:
