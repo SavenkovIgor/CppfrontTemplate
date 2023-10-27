@@ -1,4 +1,4 @@
-cmake_minimum_required (VERSION 3.22.0)
+cmake_minimum_required (VERSION 3.27)
 
 project (cpp_template)
 
@@ -18,28 +18,29 @@ set(CPP2_SOURCES
 )
 
 # Function to generate a cpp file from a cpp2 file using cppfront
-function (generate_cpp cpp2_file cpp_file_path)
+function (generate_cpp cpp2_file)
     get_filename_component(cpp_file ${cpp2_file} NAME_WE)
     set(cpp_file "${cpp_file}.cpp")
     add_custom_command (
-        COMMAND ${cppfront_CMD} ${cpp2_file} -o ${GEN_DIR}/${cpp_file}
+        COMMAND ${cppfront_CMD} ${CMAKE_CURRENT_SOURCE_DIR}/${cpp2_file} -o ${GEN_DIR}/${cpp_file}
         DEPENDS ${cpp2_file}
         OUTPUT ${GEN_DIR}/${cpp_file}
         COMMENT "Cppfront: ${cpp2_file} -> ${GEN_DIR}/${cpp_file}"
     )
-    set(${cpp_file_path} ${GEN_DIR}/${cpp_file} PARENT_SCOPE)
+    set(cpp_file_path ${GEN_DIR}/${cpp_file})
+    return(PROPAGATE cpp_file_path)
 endfunction()
 
-# Call the function to generate main.cpp
-generate_cpp("${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp2" "RES_PATH")
+# Call the function to generate cpp files from cpp2 files
+set(GEN_CPP_SOURCES "")
+foreach(cpp2_file ${CPP2_SOURCES})
+    generate_cpp(${cpp2_file})
+    list(APPEND GEN_CPP_SOURCES ${cpp_file_path})
+endforeach()
 
-message(STATUS "RES_PATH: ${RES_PATH}")
+message(STATUS "GEN_CPP_SOURCES: ${GEN_CPP_SOURCES}")
 
-add_custom_target (cpp2 ALL DEPENDS ${CMAKE_BINARY_DIR}/gen/main.cpp)
-
-add_executable (cpp_template ${CMAKE_BINARY_DIR}/gen/main.cpp)
-
-add_dependencies (cpp_template cpp2)
+add_executable (cpp_template ${GEN_CPP_SOURCES})
 
 set_property (TARGET cpp_template PROPERTY CXX_STANDARD 20)
 
