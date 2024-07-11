@@ -6,3 +6,6 @@ compiler.version=18
 compiler.cppstd=23
 compiler.libcxx=libc++
 os=Linux
+
+[conf]
+tools.cmake.cmaketoolchain:generator=Ninja
