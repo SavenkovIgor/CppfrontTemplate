@@ -19,6 +19,9 @@ jobs:
         chmod +x llvm.sh
         sudo ./llvm.sh ${{ env.CLANG_VERSION }} all
 
+    - name: Update alternatives for c++
+      run: sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-${{ env.CLANG_VERSION }} 100
+
     - name: Install latest cmake and ninja
       uses: lukka/get-cmake@latest
 
