@@ -4,5 +4,5 @@ build_type=Release
 compiler=clang
 compiler.version=18
 compiler.cppstd=23
-compiler.libcxx=libc++11
+compiler.libcxx=libc++
 os=Linux
