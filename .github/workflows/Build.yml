@@ -2,6 +2,9 @@ on:
   push:
     branches: [ "main" ]
 
+env:
+  CLANG_VERSION: 18
+
 jobs:
   build:
     timeout-minutes: 30
@@ -9,6 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+
+    - name: Install Clang
+      run: |
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        sudo ./llvm.sh ${{ env.CLANG_VERSION }} all
 
     - name: Install latest cmake and ninja
       uses: lukka/get-cmake@latest
