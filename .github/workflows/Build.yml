@@ -14,22 +14,22 @@ env:
 jobs:
   build:
     timeout-minutes: 30
-
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+
+    - name: Completely remove clang-14
+      run: |
+        sudo apt remove -y clang-14 clang-tools-14
+        sudo apt autoremove -y
 
     - name: Install Clang
       run: |
         wget https://apt.llvm.org/llvm.sh
         chmod +x llvm.sh
         sudo ./llvm.sh ${{ env.CLANG_VERSION }} all
-
-    - name: Install libc++ and libc++abi
-      run: sudo apt install -y libc++-dev libc++abi-dev
-
-    - name: Install clang-tools
-      run: sudo apt install -y clang-tools-${{ env.CLANG_VERSION }}
+        sudo apt install -y libc++-${{ env.CLANG_VERSION }}-dev libc++abi-${{ env.CLANG_VERSION }}-dev
+        sudo apt install -y clang-tools-${{ env.CLANG_VERSION }}
 
     - name: Update alternatives
       run: |
@@ -46,10 +46,12 @@ jobs:
       with:
         version: 2.5.0
 
-
     - name: Print versions
       run: |
+        cc --version
         c++ --version
+        clang --version
+        clang++ --version
         cmake --version
         ninja --version
         conan --version
