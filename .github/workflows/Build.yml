@@ -6,10 +6,10 @@ on:
 
 env:
   CLANG_VERSION: 18
-  CXX: clang++-18
-  CC: clang-18
-  CXXFLAGS: "-stdlib=libc++ -I/usr/include/c++/v1"
-  LDFLAGS: "-L/usr/lib"
+  # CXX: clang++-18
+  # CC: clang-18
+  # CXXFLAGS: "-stdlib=libc++ -I/usr/include/c++/v1"
+  # LDFLAGS: "-L/usr/lib"
 
 jobs:
   build:
