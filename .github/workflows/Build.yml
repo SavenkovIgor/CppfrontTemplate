@@ -30,6 +30,13 @@ jobs:
       with:
         version: 2.5.0
 
+    - name: Print versions
+      run: |
+        c++ --version
+        cmake --version
+        ninja --version
+        conan --version
+
     - name: Create default Conan profile
       run: conan profile detect
 
