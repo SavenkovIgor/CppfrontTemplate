@@ -28,7 +28,7 @@ class Project:
     def build(self):
         self.install()
         print(f'---BUILD {self.name}---')
-        system_call(f'conan build -of ./conanfiles ./')
+        system_call(f'conan build -of ./conanfiles ./ -pr:h=./conan_profile/default -pr:b=./conan_profile/default')
 
     def run(self):
         print(f'---RUN {self.name}---')

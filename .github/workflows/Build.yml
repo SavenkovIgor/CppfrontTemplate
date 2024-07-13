@@ -1,14 +1,42 @@
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  CLANG_VERSION: 18
+  # CXX: clang++-18
+  # CC: clang-18
+  # CXXFLAGS: "-stdlib=libc++ -I/usr/include/c++/v1"
+  # LDFLAGS: "-L/usr/lib"
 
 jobs:
   build:
     timeout-minutes: 30
-
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+
+    - name: Completely remove clang-14
+      run: |
+        sudo apt remove -y clang-14 clang-tools-14
+        sudo apt autoremove -y
+
+    - name: Install Clang
+      run: |
+        wget https://apt.llvm.org/llvm.sh
+        chmod +x llvm.sh
+        sudo ./llvm.sh ${{ env.CLANG_VERSION }} all
+        sudo apt install -y libc++-${{ env.CLANG_VERSION }}-dev libc++abi-${{ env.CLANG_VERSION }}-dev
+        sudo apt install -y clang-tools-${{ env.CLANG_VERSION }}
+
+    - name: Update alternatives
+      run: |
+        sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang-${{ env.CLANG_VERSION }} 100
+        sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-${{ env.CLANG_VERSION }} 100
+        sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-${{ env.CLANG_VERSION }} 100
+        sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-${{ env.CLANG_VERSION }} 100
 
     - name: Install latest cmake and ninja
       uses: lukka/get-cmake@latest
@@ -16,7 +44,17 @@ jobs:
     - name: Install Conan package manager
       uses: turtlebrowser/get-conan@main
       with:
-        version: 2.0.9
+        version: 2.5.0
+
+    - name: Print versions
+      run: |
+        cc --version
+        c++ --version
+        clang --version
+        clang++ --version
+        cmake --version
+        ninja --version
+        conan --version
 
     - name: Create default Conan profile
       run: conan profile detect
