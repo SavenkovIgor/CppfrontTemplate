@@ -2,6 +2,9 @@ cmake_minimum_required (VERSION 3.30)
 
 project (cpp_template)
 
+message(STATUS "C Compiler: ${CMAKE_C_COMPILER}")
+message(STATUS "C++ Compiler: ${CMAKE_CXX_COMPILER}")
+
 # cppfront setup
 include (FetchContent)
 
