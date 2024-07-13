@@ -24,6 +24,9 @@ jobs:
     - name: Install libc++ and libc++abi
       run: sudo apt install -y libc++-${{ env.CLANG_VERSION }}-dev libc++abi-${{ env.CLANG_VERSION }}-dev
 
+    - name: Update alternatives for c
+      run: sudo update-alternatives --install /usr/bin/cc cc /usr/bin/clang-${{ env.CLANG_VERSION }} 100
+
     - name: Update alternatives for c++
       run: sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-${{ env.CLANG_VERSION }} 100
 
