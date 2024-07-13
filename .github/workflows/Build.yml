@@ -6,6 +6,10 @@ on:
 
 env:
   CLANG_VERSION: 18
+  CXX: clang++
+  CC: clang
+  CXXFLAGS: "-stdlib=libc++ -I/usr/include/c++/v1"
+  LDFLAGS: "-L/usr/lib"
 
 jobs:
   build:
@@ -29,13 +33,6 @@ jobs:
 
     - name: Update alternatives for c++
       run: sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-${{ env.CLANG_VERSION }} 100
-
-    - name: Set environment variables
-      run: |
-        export CXX=clang++
-        export CC=clang
-        export CXXFLAGS="-stdlib=libc++ -I/usr/include/c++/v1"
-        export LDFLAGS="-L/usr/lib"
 
     - name: Install latest cmake and ninja
       uses: lukka/get-cmake@latest
